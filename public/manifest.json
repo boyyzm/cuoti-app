@@ -1,0 +1,17 @@
+{
+  "name": "错题举一反三",
+  "short_name": "错题本",
+  "description": "帮助小学生家长管理错题，AI举一反三出题练习",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f7f8fa",
+  "theme_color": "#1989fa",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+/* 全局样式 */
+:root {
+  --primary-color: #1989fa;
+  --secondary-color: #ff976a;
+  --background-color: #f7f8fa;
+  --text-color: #323233;
+  --card-color: #ffffff;
+  --border-color: #ebedf0;
+}
+
+/* 安全区域适配 */
+body {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* 隐藏滚动条但保留功能 */
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* 通用卡片样式 */
+.card {
+  background: var(--card-color);
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* 通用按钮样式 */
+.btn-primary {
+  background: var(--primary-color) !important;
+  border-color: var(--primary-color) !important;
+  color: white !important;
+}
+
+/* 空状态样式 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  color: #969799;
+}
+
+.empty-state .icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+/* 页面容器 */
+.page-container {
+  min-height: 100vh;
+  background: var(--background-color);
+  padding-bottom: 80px;
+}
