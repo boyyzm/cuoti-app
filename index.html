@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#1989fa">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>错题举一反三</title>
+  <link rel="manifest" href="/cuoti-app/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/cuoti-app/favicon.svg">
+  <style>
+    #loading-hint {
+      display: flex; justify-content: center; align-items: center;
+      height: 100vh; font-size: 16px; color: #666;
+      font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    #error-hint {
+      display: none; padding: 20px; margin: 20px;
+      background: #fff3f3; border: 1px solid #ffccc7;
+      border-radius: 8px; font-size: 14px; color: #cf1322;
+      font-family: monospace; white-space: pre-wrap; word-break: break-all;
+    }
+  </style>
+  <script type="module" crossorigin src="/cuoti-app/assets/index-BdrZnbQ_.js"></script>
+  <link rel="stylesheet" crossorigin href="/cuoti-app/assets/index-BaGbqveQ.css">
+</head>
+<body>
+  <div id="app">
+    <div id="loading-hint">加载中...</div>
+  </div>
+  <div id="error-hint"></div>
+  <script>
+    // 全局错误捕获
+    window.onerror = function(msg, url, line, col, err) {
+      var hint = document.getElementById('error-hint');
+      if (hint) {
+        hint.style.display = 'block';
+        hint.textContent = '错误: ' + msg + '\n文件: ' + url + '\n行: ' + line;
+      }
+      var loading = document.getElementById('loading-hint');
+      if (loading) loading.style.display = 'none';
+    };
+    window.addEventListener('unhandledrejection', function(e) {
+      var hint = document.getElementById('error-hint');
+      if (hint) {
+        hint.style.display = 'block';
+        hint.textContent = 'Promise错误: ' + (e.reason && e.reason.message || e.reason);
+      }
+    });
+  </script>
+</body>
+</html>
