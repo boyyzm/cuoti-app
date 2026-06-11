@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/cuoti-app/',
+  base: 'https://pjsbzornftanwokgqiuk.supabase.co/storage/v1/object/public/website/',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')
