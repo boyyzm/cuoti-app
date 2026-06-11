@@ -12,15 +12,20 @@ app.use(createPinia())
 app.use(router)
 app.use(Vant)
 
-// 初始化认证状态
+// 先mount再初始化认证，确保页面能渲染
+app.mount('#app')
+
+// 初始化认证状态（异步，不阻塞渲染）
 import { useUserStore } from './stores/user'
 const userStore = useUserStore()
-userStore.initAuth()
+userStore.initAuth().catch(e => {
+  console.error('初始化认证失败:', e)
+})
 
 // 注册Service Worker
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
+    navigator.serviceWorker.register(import.meta.env.BASE_URL + 'sw.js')
       .then(registration => {
         console.log('SW registered:', registration)
       })
@@ -29,5 +34,3 @@ if ('serviceWorker' in navigator) {
       })
   })
 }
-
-app.mount('#app')
