@@ -9,9 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1066.0",
     "@supabase/supabase-js": "^2.43.0",
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.1",
+    "pg": "^8.21.0",
     "pinia": "^2.1.7",
     "vant": "^4.9.0",
     "vue": "^3.4.21",

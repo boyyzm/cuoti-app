@@ -1,0 +1,19 @@
+import{i as A}from"./index-8inPTUW1.js";const k="https://api.deepseek.com/v1",$="sk-31c2501cc8274c66b7bbd327742649bb",w="https://pjsbzornftanwokgqiuk.supabase.co",c="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBqc2J6b3JuZnRhbndva2dxaXVrIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MTE3ODgyMSwiZXhwIjoyMDk2NzU0ODIxfQ.MjYv5WDZwcbSII3qAUoltTaW29SgzpdEcGvUFSvtiSo",j={createUser:async(t,d,i)=>{const m=`${t}@cuoti.local`,s=d||"123456",p=await fetch(`${w}/auth/v1/admin/users`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${c}`,apikey:c},body:JSON.stringify({email:m,password:s,email_confirm:!0})}),r=await p.json();if(!p.ok)throw new Error(r.msg||r.message||"创建用户失败");const u=await(await fetch(`${w}/rest/v1/profiles`,{method:"POST",headers:{"Content-Type":"application/json",apikey:c,Authorization:`Bearer ${c}`,Prefer:"return=representation"},body:JSON.stringify({user_id:r.id,username:t,role:"user"})})).json();return{success:!0,user:r,profile:u==null?void 0:u[0]}},getUsers:async t=>({success:!0,users:await(await fetch(`${w}/rest/v1/profiles?select=*&order=created_at.desc`,{headers:{apikey:c,Authorization:`Bearer ${c}`}})).json()}),deleteUser:async(t,d)=>{const i=await fetch(`${w}/auth/v1/admin/users/${t}`,{method:"DELETE",headers:{Authorization:`Bearer ${c}`,apikey:c}});if(!i.ok){const m=await i.json();throw new Error(m.msg||"删除用户失败")}return{success:!0}}},x={extract:async(t,d,i)=>{var l,h,n,y;const s=await fetch(`${k}/chat/completions`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${$}`},body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:[{type:"text",text:"你是一个小学错题分析助手。请仔细观察这张作业/试卷照片，识别每一道题目。对每道题目提供：题号、题型（填空/选择/判断/应用题/计算题）、完整文字内容、在图片中的位置（top_percent和bottom_percent，0-100的百分比）。不要提取学生答案。返回JSON数组。"},{type:"image_url",image_url:{url:t}}]}]})}),p=await s.json();if(!s.ok)throw new Error(((l=p.error)==null?void 0:l.message)||"AI识别失败，请重试");const r=(y=(n=(h=p.choices)==null?void 0:h[0])==null?void 0:n.message)==null?void 0:y.content;if(!r)throw new Error("AI返回内容为空");let o=[];try{const e=r.match(/\[[\s\S]*\]/);e?o=JSON.parse(e[0]):o=JSON.parse(r)}catch{throw new Error("解析AI返回内容失败")}return Array.isArray(o)||(o=[o]),{success:!0,questions:o.map(e=>({question_type:e.question_type||"练习题",extracted_text:e.content||e.question_text||JSON.stringify(e),cropped_image:t,top_percent:e.top_percent,bottom_percent:e.bottom_percent}))}}},N={generate:async(t,d,i,m)=>{var S,_,E,I,g;const{data:s,error:p}=await A.from("questions").select("*").in("id",t);if(p||!s||s.length===0)throw new Error("未找到相关题目");const o=`你是一个小学出题助手。请根据以下错题，生成类似的练习题。
+
+原始错题：
+${s.map((a,b)=>`${b+1}. [${a.question_type||"练习题"}] ${a.extracted_text||""}`).join(`
+`)}
+
+出题要求：
+1. 方向：${d||"同一知识点的变式题"}
+2. 生成${i}道题
+3. 难度与原题相当或略高
+4. 题型与原题一致
+5. 不重复原题
+6. 每道题都是独立的完整题目
+
+返回JSON数组，每项包含：
+- type: 题型（填空/选择/判断/应用题/计算题）
+- content: 题目内容
+- options: 数组，仅选择题需要，4个选项
+- answer_lines: 数字，应用题答题行数，默认4`,u=await fetch(`${k}/chat/completions`,{method:"POST",headers:{"Content-Type":"application/json",Authorization:`Bearer ${$}`},body:JSON.stringify({model:"deepseek-chat",messages:[{role:"user",content:o}]})}),l=await u.json();if(!u.ok)throw new Error(((S=l.error)==null?void 0:S.message)||"AI生成失败，请重试");const h=(I=(E=(_=l.choices)==null?void 0:_[0])==null?void 0:E.message)==null?void 0:I.content;if(!h)throw new Error("AI返回内容为空");let n=[];try{const a=h.match(/\[[\s\S]*\]/);a?n=JSON.parse(a[0]):n=JSON.parse(h)}catch{throw new Error("解析AI返回内容失败")}Array.isArray(n)||(n=[n]);const e={user_id:(g=s[0])==null?void 0:g.user_id,title:`举一反三练习 - ${new Date().toLocaleDateString("zh-CN")}`,question_ids:t,generated_content:{questions:n,source_questions:s.map(a=>a.extracted_text)}},{data:O,error:f}=await A.from("practices").insert(e).select().single();return f&&console.error("保存练习失败:",f),{success:!0,practice:O||{id:Date.now().toString(),...e}}}};export{j as a,x as e,N as g};

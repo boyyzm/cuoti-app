@@ -4,7 +4,7 @@ import path from 'path'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/cuoti-app/',
+  base: './',
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src')
@@ -14,7 +14,7 @@ export default defineConfig({
     port: 3000
   },
   build: {
-    outDir: 'dist',
+    outDir: 'dist-local',
     assetsDir: 'assets'
   }
 })
